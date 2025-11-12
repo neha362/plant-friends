@@ -1,0 +1,24 @@
+{
+  "devFiles": [],
+  "ampDevFiles": [],
+  "polyfillFiles": [],
+  "lowPriorityFiles": [],
+  "rootMainFiles": [],
+  "pages": {
+    "/": [
+      "static/chunks/10d89_web-vitals_dist_web-vitals_07264a21.js",
+      "static/chunks/3da06_next_dist_compiled_211a506e._.js",
+      "static/chunks/3da06_next_dist_shared_lib_55313bc5._.js",
+      "static/chunks/3da06_next_dist_client_8b8e8e40._.js",
+      "static/chunks/3da06_next_dist_7bd7c880._.js",
+      "static/chunks/6e322_react_e45a75c4._.js",
+      "static/chunks/af74a_react-dom_cjs_react-dom_development_3e847595.js",
+      "static/chunks/af74a_react-dom_23dd0a63._.js",
+      "static/chunks/32a08__pnpm_d67d7c95._.js",
+      "static/chunks/[root-of-the-server]__f3416dc7._.js",
+      "static/chunks/plant-friends_src_pages_index_2da965e7._.js",
+      "static/chunks/turbopack-plant-friends_src_pages_index_3a059738._.js"
+    ]
+  },
+  "ampFirstPages": []
+}

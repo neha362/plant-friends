@@ -1,0 +1,8 @@
+.userTable {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 6px 18px rgba(11, 20, 30, 0.06);
+}
+.userTable .cell {
+  padding: 0.6rem 1rem;
+}

@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 4, "column": 0}, "map": {"version":3,"sources":["file:///Users/nehasudarshan/Documents/GitHub/INFO_1998/plant-friends/src/pages/index.js"],"sourcesContent":["export default function Home() {\n  return <main><h1>Plant Friends</h1></main>\n}"],"names":[],"mappings":";;;;;;AAAe,SAAS;IACtB,qBAAO,qKAAC;kBAAK,cAAA,qKAAC;sBAAG;;;;;;;;;;;AACnB","debugId":null}}]
+}
