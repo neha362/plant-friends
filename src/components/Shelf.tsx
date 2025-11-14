@@ -1,49 +1,71 @@
-import { Button } from "semantic-ui-react"
-import { PlantData } from "../types";
-import { useState, useMemo } from "react";
-import Paginator from "./Paginator";
+import { useState, useEffect } from 'react';
+import { Header, Card, Container, Loader, Message } from 'semantic-ui-react';
 
-
-type ShelfProps = {
-  data: PlantData[];
-  itemsPerPage: number;
-};
-
-let lastPossiblePage = 1;
-  
-
-const Shelf = ({
-  data,
-  itemsPerPage,
-}: ShelfProps) => {
-const [page, setPage] = useState(1);
-  const [search, setSearch] = useState("");
-  const itemsToDisplay: ShelfProps = useMemo(() => {
-    data=data.filter(x => {return x.plant_name.toLowerCase().trim().includes(search.toLowerCase().trim())});
-    console.log(data);
-    lastPossiblePage = Math.ceil(data.length/itemsPerPage);
-    return {data:data.slice((page - 1) * itemsPerPage, Math.min(data.length, (page) * itemsPerPage)), itemsPerPage:itemsPerPage};
-  }, [data, search, page]);
-
-  return (
-    <div className="body">
-      <h1>My Plants</h1>
-
-      <input data-testid="search" defaultValue="search" id="search" type="text" value={search} onChange={(e) => {setPage(1); setSearch(e.target.value); console.log(e.target.value);}}/>
-
-      <div className="garden">
-        {itemsToDisplay.data.map((item) => (
-          <div className="item" key={item.plant_name} data-testid="item">
-            {item.plant_name} 
-            {item.sent_from}
-            {item.date.toDateString()}
-          </div>
-        ))}
-      </div>
-     <Paginator minLimit={1} maxLimit={Math.max(1, lastPossiblePage)} page={page} setPage={setPage}/>
-    </div>
-    
-  );
+interface Plant {
+  id: number;
+  name: string;
+  price: number;
+  description: string;
 }
 
-export default Shelf
+const ShelfPage = () => {
+  const [plants, setPlants] = useState<Plant[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    // Fetch plants from backend
+    fetch('http://localhost:5001/api/plants')
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          setPlants(data.plants);
+        }
+        setLoading(false);
+      })
+      .catch(err => {
+        setError('Failed to load plants. Make sure backend is running!');
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) {
+    return <Loader active>Loading your shelf...</Loader>;
+  }
+
+  if (error) {
+    return (
+      <Message negative>
+        <Message.Header>Error</Message.Header>
+        <p>{error}</p>
+      </Message>
+    );
+  }
+
+  return (
+    <Container>
+      <Header as="h1">🌿 My Plant Shelf</Header>
+      <p>Your collection of plants (connected to backend!)</p>
+      
+      <Card.Group>
+        {plants.map(plant => (
+          <Card key={plant.id}>
+            <Card.Content>
+              <Card.Header>{plant.name}</Card.Header>
+              <Card.Meta>🌱 {plant.price} coins</Card.Meta>
+              <Card.Description>{plant.description}</Card.Description>
+            </Card.Content>
+          </Card>
+        ))}
+      </Card.Group>
+
+      {plants.length === 0 && (
+        <Message info>
+          <p>No plants yet! Start studying to earn coins and buy plants.</p>
+        </Message>
+      )}
+    </Container>
+  );
+};
+
+export default ShelfPage;
