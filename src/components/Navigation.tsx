@@ -30,6 +30,9 @@ function Navigation() {
         <Menu.Item as={Link} to="/workstation">
           Study Timer
         </Menu.Item>
+        <Menu.Item as={Link} to="/tasklist">
+          Tasks
+        </Menu.Item>
         
         <Menu.Menu position="right">
           <Menu.Item>

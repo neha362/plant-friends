@@ -5,6 +5,7 @@ import LoginPage from './pages/login';
 import ShelfPage from './pages/shelf';
 import ShopPage from './pages/shop';
 import WorkstationPage from './pages/workstation';
+import TaskPage from './pages/tasklist';
 import Navigation from './components/Navigation';
 
 function AppContent() {
@@ -45,6 +46,14 @@ function AppContent() {
           element={
             <ProtectedRoute>
               <WorkstationPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/tasklist"
+          element={
+            <ProtectedRoute>
+              <TaskPage />
             </ProtectedRoute>
           }
         />
