@@ -4,6 +4,7 @@ import { Menu, Container, Button } from 'semantic-ui-react';
 import { auth } from '../firebase';
 import { signOut } from 'firebase/auth';
 import { useAuth } from '../contexts/AuthContext';
+import "../styles.css"
 
 function Navigation() {
   const navigate = useNavigate();
@@ -21,18 +22,20 @@ function Navigation() {
   return (
     <Menu>
       <Container>
-        <Menu.Item as={Link} to="/shelf" header>
-          🌱 Plant Friends
-        </Menu.Item>
-        <Menu.Item as={Link} to="/shelf">
-          My Shelf
-        </Menu.Item>
-        <Menu.Item as={Link} to="/workstation">
-          Study Timer
-        </Menu.Item>
-        <Menu.Item as={Link} to="/tasklist">
-          Tasks
-        </Menu.Item>
+        <div className='space'>
+          <Menu.Item as={Link} to="/shelf" header>
+            🌱 Plant Friends
+          </Menu.Item>
+          <Menu.Item as={Link} to="/shelf">
+            My Shelf
+          </Menu.Item>
+          <Menu.Item as={Link} to="/workstation">
+            Study Timer
+          </Menu.Item>
+          <Menu.Item as={Link} to="/tasklist">
+            Tasks
+          </Menu.Item>
+        </div>
         
         <Menu.Menu position="right">
           <Menu.Item>

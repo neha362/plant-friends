@@ -2,6 +2,7 @@ import React, {useState, useEffect} from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { db } from "../firebase";
 import {doc, getDoc, setDoc} from "firebase/firestore"
+import "../styles.css"
 
 interface Task {
     id: number;
@@ -12,6 +13,7 @@ interface Task {
 export default function Tasks() {
     const {currentUser}=useAuth();
     const [text, setText] = useState("")
+    const [coins, setCoins] = useState(0);
     const [taskList, setList] = useState<Task[]>([]);
 
     useEffect(()=>{
@@ -31,6 +33,21 @@ export default function Tasks() {
         };
         loadTasks();
     }, [currentUser]);
+
+    useEffect(() => {
+        loadUserCoins();
+      }, [currentUser]);
+    
+    const loadUserCoins = async () => {
+        if (!currentUser) return;
+    
+        const userDoc = doc(db, 'users', currentUser.uid);
+        const docSnap = await getDoc(userDoc);
+    
+        if (docSnap.exists()) {
+          setCoins(docSnap.data().coins || 0);
+        }
+      };
 
     const saveTasks = async (updatedList: Task[])=>{
         if (!currentUser) return;
@@ -55,11 +72,41 @@ export default function Tasks() {
     };
 
     const checkTask = async (id: number) => {
-         const updatedList = taskList.map((task)=>
-            task.id === id? {...task, completed: !task.completed}:task
-        );
+        let temp = 0;
+         const updatedList = taskList.map((task)=> {
+            if (task.id === id) {
+                const prevStatus = task.completed;
+                const currentStatus = !task.completed;
+
+                if (!prevStatus && currentStatus) {
+                    temp += 5;
+                }
+                else if (prevStatus&&!currentStatus) {
+                    temp -= 5;
+                }
+                return {...task, completed:currentStatus};
+            }
+            return task;
+    });
         setList(updatedList);
         await saveTasks(updatedList);
+
+        if (temp !== 0) {
+            const newCoins = coins+temp;
+            setCoins(newCoins);
+            await saveCoins(newCoins);
+        }
+    };
+
+    const saveCoins = async (newCoins:number)=> {
+        if (!currentUser) return;
+
+        const users = doc(db, "users",currentUser.uid);
+        await setDoc (
+            users,
+            {coins:newCoins},
+            {merge:true}
+        );
     };
 
     const clearCompleted = async () => {
@@ -69,8 +116,9 @@ export default function Tasks() {
     }
 
     return (
-        <div>
+        <div className="center">
             <h1>Tasks</h1>
+            <p>You currently have {coins} Coins</p>
             <p>Complete a task to get 5 coins!</p>
             <div>
                 <input
@@ -93,7 +141,8 @@ export default function Tasks() {
                             onChange={()=>checkTask(task.id)}
                         />
                         <span
-                            style={{textDecoration:task.completed?"line-through":"none"
+                            style={{textDecoration:task.completed?"line-through":"none",
+                            color:task.completed?"green":"black"
                         }}
                         >
                             {task.text}

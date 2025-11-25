@@ -1,0 +1,11 @@
+.center {
+    margin-left: auto;
+    margin-right: auto;
+    width: 300px;
+}
+
+.space {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 10px;
+}
