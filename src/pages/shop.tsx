@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Header, Card, Button, Icon, Message, Statistic, Grid } from 'semantic-ui-react';
+import { Container, Header, Card, Button, Icon, Message, Statistic, Grid, Modal, Input } from 'semantic-ui-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { db } from '../firebase';
-import { doc, getDoc, updateDoc, arrayUnion } from 'firebase/firestore';
+import { doc, query, where, getDoc, getDocs, updateDoc, arrayUnion, collection } from 'firebase/firestore';
+// import { query } from 'express';
 
 interface Plant {
   id: string;
@@ -13,6 +14,7 @@ interface Plant {
   cost: number;
   description: string;
   purchasedAt: number;
+  buyerId: string;
 }
 
 const PLANT_TYPES = [
@@ -30,6 +32,9 @@ function ShopPage() {
   const [coins, setCoins] = useState(0);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
+  const [modal,setModal] = useState(false);
+  const [targetEmail, setTargetEmail] = useState("");
+  const [selectedPlant, setPlant] = useState(null);
 
   useEffect(() => {
     loadUserCoins();
@@ -66,6 +71,7 @@ function ShopPage() {
         cost: plantType.cost,
         description: plantType.description,
         purchasedAt: Date.now(),
+        buyerId: currentUser.uid
       };
 
       const userDoc = doc(db, 'users', currentUser.uid);
@@ -76,6 +82,66 @@ function ShopPage() {
 
       setCoins(coins - plantType.cost);
       setMessage(`🎉 ${plantType.name} added to your shelf!`);
+      
+      setTimeout(() => {
+        navigate('/shelf');
+      }, 1500);
+    } catch (error) {
+      console.error('Error buying plant:', error);
+      setMessage('❌ Error buying plant. Please try again.');
+      setTimeout(() => setMessage(''), 3000);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const sendPlant = async (plantType: typeof PLANT_TYPES[0], targetEmail: string) => {
+    if (!currentUser) return;
+
+    if (coins < plantType.cost) {
+      setMessage('❌ Not enough coins! Study more to earn coins. 📚');
+      setTimeout(() => setMessage(''), 3000);
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const newPlant: Plant = {
+        id: Date.now().toString(),
+        name: plantType.name,
+        type: plantType.type,
+        emoji: plantType.emoji,
+        cost: plantType.cost,
+        description: plantType.description,
+        purchasedAt: Date.now(),
+        buyerId: currentUser.uid
+      };
+
+      // const sender = doc(db, 'users', currentUser.uid);
+      // await updateDoc(sender, {
+      //   coins: coins - plantType.cost,
+      // });
+
+      // const receiver = doc(db, 'users', targetId);
+      // await updateDoc(receiver, {
+      //   plants: arrayUnion(newPlant),
+      // });
+      const usersRef = collection(db, 'users');
+      const q = query(usersRef, where('email','==',targetEmail))
+      const snapshot = await getDocs(q);
+
+      if (snapshot.empty) {
+        setMessage("No user found with that email");
+        setTimeout(()=>setMessage(''),3000);
+        setLoading(false);
+        return;
+      }
+      const receiverDoc = snapshot.docs[0].ref;
+      await updateDoc(receiverDoc, {plants: arrayUnion(newPlant)});
+
+      setCoins(coins - plantType.cost);
+      setMessage(`🎉 You sent a ${plantType.name} to ${targetEmail}!`);
       
       setTimeout(() => {
         navigate('/shelf');
@@ -119,7 +185,7 @@ function ShopPage() {
       )}
 
       {/* Plants Grid */}
-      <Grid columns={3} stackable>
+      <Grid columns={3} stackable className={modal ? 'blur':''}>
         {PLANT_TYPES.map((plantType) => (
           <Grid.Column key={plantType.type}>
             <Card fluid>
@@ -135,7 +201,7 @@ function ShopPage() {
                   {plantType.description}
                 </Card.Description>
               </Card.Content>
-              <Card.Content extra>
+              <Card.Content extra className='space'>
                 <Button
                   primary
                   fluid
@@ -145,11 +211,66 @@ function ShopPage() {
                 >
                   {coins < plantType.cost ? 'Not enough coins' : `Buy for ${plantType.cost} coins`}
                 </Button>
+                <Button
+                  primary
+                  fluid
+                  onClick={() => {
+                    setModal(true);
+                    setPlant(plantType);
+                  }}
+                  disabled={coins < plantType.cost || loading}
+                  loading={loading}
+                >
+                  {coins < plantType.cost ? 'Not enough coins' : `Send to friend for ${plantType.cost} coins`}
+                </Button>
               </Card.Content>
             </Card>
           </Grid.Column>
         ))}
       </Grid>
+      <Modal
+          size='large'
+          dimmer="dimmed"
+          open = {modal}
+          onClose = {() => setModal(false)}
+          className='modal'
+        >
+          <Modal.Header>
+            Send plant to a Friend!
+          </Modal.Header>
+          <Modal.Content>
+            <p>Enter friends's user ID: </p>
+            <Input
+            fluid
+            placeholder = "Friends User ID"
+            value = {targetEmail}
+            onChange={(e)=>setTargetEmail(e.target.value)}
+            />
+          </Modal.Content>
+          <Modal.Actions>
+            <Button onClick={()=>setModal(false)}>
+              Cancel
+            </Button>
+            <Button
+            primary
+            onClick={async ()=>{
+              if (!targetEmail) {
+                alert("Please enter a valid ID")
+                return;
+              }
+              if (!selectedPlant){
+                alert("No plant seleted");
+                return;
+              }
+              await sendPlant(selectedPlant, targetEmail);
+              setModal(false);
+            }}
+            disabled={!selectedPlant||!targetEmail||loading}
+            >
+              Send plant
+              </Button>
+          </Modal.Actions>
+        </Modal>
     </Container>
   );
 }
