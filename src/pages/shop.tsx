@@ -35,6 +35,7 @@ function ShopPage() {
   const [modal,setModal] = useState(false);
   const [targetEmail, setTargetEmail] = useState("");
   const [selectedPlant, setPlant] = useState(null);
+  const [giftMessage, setGiftMessage] = useState("");
 
   useEffect(() => {
     loadUserCoins();
@@ -95,7 +96,7 @@ function ShopPage() {
     }
   };
 
-  const sendPlant = async (plantType: typeof PLANT_TYPES[0], targetEmail: string) => {
+  const sendPlant = async (plantType: typeof PLANT_TYPES[0], targetEmail: string, giftMessage: string) => {
     if (!currentUser) return;
 
     if (coins < plantType.cost) {
@@ -129,7 +130,14 @@ function ShopPage() {
         return;
       }
       const receiverDoc = snapshot.docs[0].ref;
-      await updateDoc(receiverDoc, {plants: arrayUnion(newPlant)});
+      await updateDoc(receiverDoc, {
+        plants: arrayUnion(newPlant),
+        giftAlert: {
+          plantName: plantType.name,
+          sender: currentUser.email,
+          giftMessage: giftMessage
+        }
+      });
       const senderDoc = doc(db, 'users', currentUser.uid);
       await updateDoc (senderDoc,{
         coins: coins-plantType.cost
@@ -241,6 +249,13 @@ function ShopPage() {
             value = {targetEmail}
             onChange={(e)=>setTargetEmail(e.target.value)}
             />
+            <p>Add a message: </p>
+            <Input
+            fluid
+            placeholder = "message"
+            value = {giftMessage}
+            onChange={(e)=>setGiftMessage(e.target.value)}
+            />
           </Modal.Content>
           <Modal.Actions>
             <Button onClick={()=>setModal(false)}>
@@ -257,7 +272,7 @@ function ShopPage() {
                 alert("No plant seleted");
                 return;
               }
-              await sendPlant(selectedPlant, targetEmail);
+              await sendPlant(selectedPlant, targetEmail, giftMessage);
               setModal(false);
             }}
             disabled={!selectedPlant||!targetEmail||loading}

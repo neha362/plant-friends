@@ -3,7 +3,8 @@ import { Container, Header, Card, Button, Icon } from 'semantic-ui-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { db } from '../firebase';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
+import { deleteField } from 'firebase/firestore';
 
 interface Plant {
   id: string;
@@ -20,20 +21,40 @@ function ShelfPage() {
   const navigate = useNavigate();
   const [plants, setPlants] = useState<Plant[]>([]);
   const [coins, setCoins] = useState(0);
+  // const [giftReceived, setGiftReceived]=useState(false);
+  const [giftInfo, setGiftInfo] = useState<null | {
+    plantName: string;
+    sender: string;
+    giftMessage: string;
+  }>(null);
 
   useEffect(() => {
-    loadUserData();
+    const fetch = async ()=> {
+      await loadUserData();
+    };
+    fetch();
   }, [currentUser]);
 
   const loadUserData = async () => {
     if (!currentUser) return;
-
     const userDoc = doc(db, 'users', currentUser.uid);
     const docSnap = await getDoc(userDoc);
 
     if (docSnap.exists()) {
+      const data = docSnap.data();
       setCoins(docSnap.data().coins || 0);
       setPlants(docSnap.data().plants || []);
+      if (data.giftAlert) {
+        setGiftInfo(data.giftAlert);
+        try {
+          await updateDoc(userDoc,{
+            giftAlert: deleteField()
+          });
+        }
+        catch (error){
+          console.error("Error displaying message:", error)
+        }
+      }
     } else {
       await setDoc(userDoc, {
         coins: 0,
@@ -55,7 +76,15 @@ function ShelfPage() {
           Plant Shop ({coins} coins)
         </Button>
       </div>
-
+      {giftInfo &&(
+        <div>
+          <Button onClick={()=>setGiftInfo(null)}>
+            Close
+          </Button>
+          You received a new <strong>{giftInfo.plantName}</strong> from <strong>{giftInfo.sender}</strong>!
+          <p>They said: <strong>{giftInfo.giftMessage}</strong></p>
+        </div>
+      )}
       <p style={{ color: '#666', marginBottom: '2rem' }}>
         Your collection of plants (connected to backend!)
       </p>
