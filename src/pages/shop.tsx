@@ -118,15 +118,6 @@ function ShopPage() {
         buyerId: currentUser.uid
       };
 
-      // const sender = doc(db, 'users', currentUser.uid);
-      // await updateDoc(sender, {
-      //   coins: coins - plantType.cost,
-      // });
-
-      // const receiver = doc(db, 'users', targetId);
-      // await updateDoc(receiver, {
-      //   plants: arrayUnion(newPlant),
-      // });
       const usersRef = collection(db, 'users');
       const q = query(usersRef, where('email','==',targetEmail))
       const snapshot = await getDocs(q);
@@ -139,6 +130,10 @@ function ShopPage() {
       }
       const receiverDoc = snapshot.docs[0].ref;
       await updateDoc(receiverDoc, {plants: arrayUnion(newPlant)});
+      const senderDoc = doc(db, 'users', currentUser.uid);
+      await updateDoc (senderDoc,{
+        coins: coins-plantType.cost
+      });
 
       setCoins(coins - plantType.cost);
       setMessage(`🎉 You sent a ${plantType.name} to ${targetEmail}!`);
@@ -229,7 +224,7 @@ function ShopPage() {
         ))}
       </Grid>
       <Modal
-          size='large'
+          size='fullscreen'
           dimmer="dimmed"
           open = {modal}
           onClose = {() => setModal(false)}
@@ -239,10 +234,10 @@ function ShopPage() {
             Send plant to a Friend!
           </Modal.Header>
           <Modal.Content>
-            <p>Enter friends's user ID: </p>
+            <p>Enter friends's user Email: </p>
             <Input
             fluid
-            placeholder = "Friends User ID"
+            placeholder = "Friends User Email"
             value = {targetEmail}
             onChange={(e)=>setTargetEmail(e.target.value)}
             />
