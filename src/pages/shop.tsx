@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { db } from '../firebase';
 import { doc, query, where, getDoc, getDocs, updateDoc, arrayUnion, collection } from 'firebase/firestore';
 // import { query } from 'express';
-
+import './shop.css'
 interface Plant {
   id: string;
   name: string;
@@ -159,13 +159,13 @@ function ShopPage() {
   };
 
   return (
-    <Container style={{ marginTop: '2rem' }}>
+    <Container className='shop-container'>
       {/* Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-        <Header as="h1" style={{ margin: 0 }}>
+      <div className='shop-header'>
+        <Header as="h1" className='shop-container'>
           <Icon name="shop" /> Plant Shop
         </Header>
-        <div>
+        <div className='shop-coins'>
           <Button onClick={() => navigate('/shelf')} style={{ marginRight: '1rem' }}>
             <Icon name="arrow left" />
             Back to Shelf
@@ -179,6 +179,7 @@ function ShopPage() {
 
       {message && (
         <Message
+        className='shop-message'
           positive={message.includes('🎉')}
           negative={message.includes('❌')}
           style={{ marginBottom: '2rem' }}
@@ -188,24 +189,22 @@ function ShopPage() {
       )}
 
       {/* Plants Grid */}
-      <Grid columns={3} stackable className={modal ? 'blur':''}>
+      <Card.Group itemsPerRow={3} stackable>
         {PLANT_TYPES.map((plantType) => (
-          <Grid.Column key={plantType.type}>
-            <Card fluid>
-              <Card.Content style={{ textAlign: 'center', minHeight: '200px' }}>
-                <div style={{ fontSize: '5rem', margin: '1rem 0' }}>
+            <Card key={plantType.type} className='shop-card' fluid>
+              <Card.Content>
+                <div className='emoji'>
                   {plantType.emoji}
                 </div>
-                <Card.Header>{plantType.name}</Card.Header>
-                <Card.Meta style={{ margin: '0.5rem 0' }}>
+                <Card.Header className='header'>{plantType.name}</Card.Header>
+                <Card.Meta className='meta' style={{ margin: '0.5rem 0' }}>
                   {plantType.cost} coins
                 </Card.Meta>
-                <Card.Description>
+                <Card.Description className='description'>
                   {plantType.description}
                 </Card.Description>
-              </Card.Content>
-              <Card.Content extra className='space'>
                 <Button
+                className='button'
                   primary
                   fluid
                   onClick={() => buyPlant(plantType)}
@@ -215,6 +214,7 @@ function ShopPage() {
                   {coins < plantType.cost ? 'Not enough coins' : `Buy for ${plantType.cost} coins`}
                 </Button>
                 <Button
+                className='button'
                   primary
                   fluid
                   onClick={() => {
@@ -228,9 +228,8 @@ function ShopPage() {
                 </Button>
               </Card.Content>
             </Card>
-          </Grid.Column>
         ))}
-      </Grid>
+      </Card.Group>
       <Modal
           size='fullscreen'
           dimmer="dimmed"

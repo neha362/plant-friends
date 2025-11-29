@@ -1,6 +1,6 @@
 import "./UserDisplay.css"
 import { Container, Header, Segment, Table } from "semantic-ui-react"
-import { UserData } from "../types"
+import { UserData } from "../../client/src/types"
 
 type Props = {
   user: UserData | null
