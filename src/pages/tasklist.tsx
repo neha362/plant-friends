@@ -116,7 +116,7 @@ export default function Tasks() {
     }
 
     return (
-        <div className="center">
+        <div className="item-container">
             <h1>Tasks</h1>
             <p>You currently have {coins} Coins</p>
             <p>Complete a task to get 5 coins!</p>

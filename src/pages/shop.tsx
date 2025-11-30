@@ -4,8 +4,10 @@ import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { db } from '../firebase';
 import { doc, query, where, getDoc, getDocs, updateDoc, arrayUnion, collection } from 'firebase/firestore';
+import 'semantic-ui-css/semantic.min.css';
+
 // import { query } from 'express';
-import './shop.css'
+import '../styles.css'
 interface Plant {
   id: string;
   name: string;
@@ -159,16 +161,14 @@ function ShopPage() {
   };
 
   return (
-    <Container className='shop-container'>
+    <Container className='item-container'>
       {/* Header */}
       
-      <div className='shop-header'>
+      <div className='header'>
         <Button onClick={() => navigate('/shelf')} className='button'>
-            <Icon name="arrow left" />
             Back to Shelf
           </Button>
-        <Header as="h1" className='shop-container'>
-          <Icon name="shop" />    Plant Shop    
+        <Header as="h1" className='item-container'>Plant Shop    
         </Header>
           <div className='statistic'>{coins} Coins</div>
       </div>
@@ -187,7 +187,7 @@ function ShopPage() {
       {/* Plants Grid */}
       <Card.Group itemsPerRow={3} stackable>
         {PLANT_TYPES.map((plantType) => (
-            <Card key={plantType.type} className='shop-card' fluid>
+            <Card key={plantType.type} className='card' fluid>
               <Card.Content className='content'>
                 <div className='emoji'>
                   {plantType.emoji}

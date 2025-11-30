@@ -5,8 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { db } from '../firebase';
 import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { deleteField } from 'firebase/firestore';
-import './shelf.css'
-import './shop.css'
+import '../styles.css'
 interface Plant {
   id: string;
   name: string;
@@ -66,18 +65,17 @@ function ShelfPage() {
   };
 
   return (
-    <Container className='shelf-container'>
+    <Container className='item-container'>
       {/* Header */}
-      <div className='shelf-header'>
-        <h1 className='shelf-container'>🌿 My Plant Shelf</h1>
-        <Button className="shelf-button" primary onClick={() => navigate('/shop')} icon labelPosition="left">
-          <Icon name="shop" />
+      <div className='header'>
+        <h1 className='item-container'>🌿 My Plant Shelf</h1>
+        <Button className="button" primary onClick={() => navigate('/shop')}>
           Plant Shop ({coins} coins)
         </Button>
       </div>
       {giftInfo &&(
         <div className="shelf-gift">
-          <Button className="shelf-button" onClick={()=>setGiftInfo(null)}>
+          <Button className="button" onClick={()=>setGiftInfo(null)}>
             Close
           </Button>
           You received a new <strong>{giftInfo.plantName}</strong> from <strong>{giftInfo.sender}</strong>!
@@ -88,7 +86,6 @@ function ShelfPage() {
       {/* Plants Display */}
       {plants.length === 0 ? (
         <div className="plants-display">
-          <Icon name="leaf" size="huge" />
           <Header as="h3" >Your shelf is empty!</Header>
           <p className='text'>
             Study to earn coins, then buy your first plant friend! 🌱
@@ -97,7 +94,7 @@ function ShelfPage() {
       ) : (
         <Card.Group itemsPerRow={3} stackable>
           {plants.map((plant) => (
-            <Card className='shop-card' key={plant.id}>
+            <Card className='card' key={plant.id}>
               <Card.Content className='content'>
                 <div className='emoji'>
                   {plant.emoji}

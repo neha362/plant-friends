@@ -1,7 +1,7 @@
 import
 .App {
   text-align: center;
-  
+   background-image: linear-gradient(rgba(121, 206, 75, 0.738),rgba(121, 206, 75, 0.621)), url('natalie-kovach-ph7QQq63lCs-unsplash.jpg');
 }
 
 .App-logo {
@@ -18,8 +18,7 @@ import
 body {
   margin: 0;
   min-height: 100vh;
-  background-image: url('natalie-kovach-ph7QQq63lCs-unsplash.jpg'); /* path inside public/images */
-  background-size: cover;       /* scale to cover screen */
+ background-image: linear-gradient(rgba(121, 206, 75, 0.738),rgba(121, 206, 75, 0.621)), url('natalie-kovach-ph7QQq63lCs-unsplash.jpg');  background-size: cover;       /* scale to cover screen */
   background-position: center;  /* center the image */
   background-repeat: no-repeat; /* prevent tiling */
   font-family: 'Segoe UI', sans-serif;
@@ -36,7 +35,6 @@ body {
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
 }
 
 .App-link {

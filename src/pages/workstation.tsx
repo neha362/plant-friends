@@ -3,7 +3,7 @@ import { Container, Header, Button, Progress, Segment, Icon, Message, Statistic,
 import { useAuth } from '../contexts/AuthContext';
 import { db } from '../firebase';
 import { doc, getDoc, setDoc, updateDoc, increment } from 'firebase/firestore';
-
+import "../styles.css"
 const WORK_TIME = 25 * 60; // 25 minutes in seconds
 const BREAK_TIME = 5 * 60; // 5 minutes in seconds
 const COIN_INTERVAL =  10; // 1 coin every 5 minutes
@@ -181,7 +181,7 @@ function WorkstationPage() {
   };
 
   return (
-    <Container style={{ marginTop: '2rem', maxWidth: 600 }}>
+    <Container className='item-container'>
       <Header as="h1" textAlign="center">
         {isBreak ? '☕ Break Time' : 'Study Timer'}
       </Header>
@@ -258,13 +258,13 @@ function WorkstationPage() {
       </Segment>
 
       {/* Info */}
-      <Message>
+      <Message >
         <Message.Header>Pomodoro Technique</Message.Header>
-        <Message.List>
-          <Message.Item>Work for 25 minutes with full focus</Message.Item>
-          <Message.Item>Earn 1 coin every 5 minutes (5 coins total!)</Message.Item>
-          <Message.Item>Take a 5-minute break after each session</Message.Item>
-          <Message.Item>Use coins to buy more plants for you and your friends! 🌱</Message.Item>
+        <Message.List className="message-list">
+          <Message.Item className='message-item'>Work for 25 minutes with full focus</Message.Item>
+          <Message.Item className='message-item'>Earn 1 coin every 5 minutes (5 coins total!)</Message.Item>
+          <Message.Item className='message-item'>Take a 5-minute break after each session</Message.Item>
+          <Message.Item className='message-item'>Use coins to buy more plants for you and your friends! 🌱</Message.Item>
         </Message.List>
       </Message>
 

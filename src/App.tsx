@@ -7,6 +7,8 @@ import ShopPage from './pages/shop';
 import WorkstationPage from './pages/workstation';
 import TaskPage from './pages/tasklist';
 import Navigation from './components/Navigation';
+import "./styles.css"
+import "./App.css"
 function AppContent() {
   const { currentUser } = useAuth();
 
@@ -63,11 +65,13 @@ function AppContent() {
 
 function App() {
   return (
+    <div className="app-body">
     <Router>
       <AuthProvider>
         <AppContent />
       </AuthProvider>
     </Router>
+    </div>
   );
 }
 
