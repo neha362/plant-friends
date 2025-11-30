@@ -1,0 +1,43 @@
+/* Navigation.css */
+
+/* Whole task bar container */
+.navbar {
+  display: flex;
+  justify-content: space-between; /* space out left/right items */
+  align-items: center;
+  padding: 0.75rem 1.5rem;
+  background-color: #2e7d32; /* plant green */
+  color: white;
+  position: sticky; /* stays at top when scrolling */
+  top: 0;
+  z-index: 1000;
+}
+
+/* Logo or title on the left */
+.navbar-logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* Links on the right */
+.navbar-links {
+  display: flex;
+  gap: 1rem;
+}
+
+.navbar-links a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.navbar-links a:hover {
+  color: #c8e6c9; /* lighter green on hover */
+}
+
+/* Optional: active link styling */
+.navbar-links .active {
+  border-bottom: 2px solid #fff;
+}

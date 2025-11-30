@@ -7,7 +7,6 @@ import ShopPage from './pages/shop';
 import WorkstationPage from './pages/workstation';
 import TaskPage from './pages/tasklist';
 import Navigation from './components/Navigation';
-
 function AppContent() {
   const { currentUser } = useAuth();
 

@@ -1,0 +1,58 @@
+.shelf-container {
+  margin-top: 2rem;
+  padding: 1rem;
+  background-color:#aaed61;
+  border-radius: 10px;
+}
+
+.shelf-header h1 {
+      margin: 0;
+  font-size: 2rem;
+  width:fit-content;
+  color: #2e7d32;
+  font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  text-decoration:underline;
+  text-decoration-style: wavy;
+  text-decoration-thickness:5%;
+  text-underline-offset: 30%;
+}
+
+
+.shelf-header {
+ display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.shelf-button {
+    font-weight: 600;
+    border-radius: 10px;
+    padding:1%;
+    height:20%;
+    font-size:small;
+    margin:2%;
+    justify-items: right;
+}
+
+.shelf-gift {
+
+}
+
+.text {
+
+}
+
+h3 {
+
+}
+
+.plants-display {
+    text-align: 'center';
+    padding: '4rem';
+    border: '2px dashed #ddd';
+    border-radius: '8px';
+    background: '#fafafa';
+    justify-content: center;
+    justify-items: center;
+}

@@ -5,7 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import { db } from '../firebase';
 import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { deleteField } from 'firebase/firestore';
-
+import './shelf.css'
+import './shop.css'
 interface Plant {
   id: string;
   name: string;
@@ -65,68 +66,49 @@ function ShelfPage() {
   };
 
   return (
-    <Container style={{ marginTop: '2rem' }}>
+    <Container className='shelf-container'>
       {/* Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-        <Header as="h1" style={{ margin: 0 }}>
-          🌿 My Plant Shelf
-        </Header>
-        <Button primary onClick={() => navigate('/shop')} icon labelPosition="left">
+      <div className='shelf-header'>
+        <h1 className='shelf-container'>🌿 My Plant Shelf</h1>
+        <Button className="shelf-button" primary onClick={() => navigate('/shop')} icon labelPosition="left">
           <Icon name="shop" />
           Plant Shop ({coins} coins)
         </Button>
       </div>
       {giftInfo &&(
-        <div>
-          <Button onClick={()=>setGiftInfo(null)}>
+        <div className="shelf-gift">
+          <Button className="shelf-button" onClick={()=>setGiftInfo(null)}>
             Close
           </Button>
           You received a new <strong>{giftInfo.plantName}</strong> from <strong>{giftInfo.sender}</strong>!
           <p>They said: <strong>{giftInfo.giftMessage}</strong></p>
         </div>
       )}
-      <p style={{ color: '#666', marginBottom: '2rem' }}>
-        Your collection of plants (connected to backend!)
-      </p>
 
       {/* Plants Display */}
       {plants.length === 0 ? (
-        <div style={{
-          textAlign: 'center',
-          padding: '4rem',
-          border: '2px dashed #ddd',
-          borderRadius: '8px',
-          background: '#fafafa'
-        }}>
-          <Icon name="leaf" size="huge" style={{ color: '#ccc', marginBottom: '1rem' }} />
-          <Header as="h3" style={{ color: '#999' }}>Your shelf is empty!</Header>
-          <p style={{ color: '#999', marginBottom: '1rem' }}>
+        <div className="plants-display">
+          <Icon name="leaf" size="huge" />
+          <Header as="h3" >Your shelf is empty!</Header>
+          <p className='text'>
             Study to earn coins, then buy your first plant friend! 🌱
           </p>
-          <Button primary onClick={() => navigate('/shop')}>
-            Visit Plant Shop
-          </Button>
         </div>
       ) : (
         <Card.Group itemsPerRow={3} stackable>
           {plants.map((plant) => (
-            <Card key={plant.id}>
-              <Card.Content>
-                <div style={{
-                  textAlign: 'center',
-                  fontSize: '4rem',
-                  marginBottom: '1rem',
-                  padding: '1rem'
-                }}>
+            <Card className='shop-card' key={plant.id}>
+              <Card.Content className='content'>
+                <div className='emoji'>
                   {plant.emoji}
                 </div>
-                <Card.Header style={{ textAlign: 'center' }}>
+                <Card.Header className='header'>
                   {plant.name}
                 </Card.Header>
-                <Card.Meta style={{ textAlign: 'center', color: '#999' }}>
+                <Card.Meta className='meta'>
                   <Icon name="bitcoin" /> {plant.cost} coins
                 </Card.Meta>
-                <Card.Description style={{ marginTop: '1rem', textAlign: 'center' }}>
+                <Card.Description className='description'>
                   {plant.description}
                 </Card.Description>
               </Card.Content>
