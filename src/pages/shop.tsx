@@ -161,20 +161,16 @@ function ShopPage() {
   return (
     <Container className='shop-container'>
       {/* Header */}
+      
       <div className='shop-header'>
-        <Header as="h1" className='shop-container'>
-          <Icon name="shop" /> Plant Shop
-        </Header>
-        <div className='shop-coins'>
-          <Button onClick={() => navigate('/shelf')} style={{ marginRight: '1rem' }}>
+        <Button onClick={() => navigate('/shelf')} className='button'>
             <Icon name="arrow left" />
             Back to Shelf
           </Button>
-          <Statistic size="mini" horizontal>
-            <Statistic.Value>{coins}</Statistic.Value>
-            <Statistic.Label>Coins</Statistic.Label>
-          </Statistic>
-        </div>
+        <Header as="h1" className='shop-container'>
+          <Icon name="shop" />    Plant Shop    
+        </Header>
+          <div className='statistic'>{coins} Coins</div>
       </div>
 
       {message && (
@@ -192,12 +188,12 @@ function ShopPage() {
       <Card.Group itemsPerRow={3} stackable>
         {PLANT_TYPES.map((plantType) => (
             <Card key={plantType.type} className='shop-card' fluid>
-              <Card.Content>
+              <Card.Content className='content'>
                 <div className='emoji'>
                   {plantType.emoji}
                 </div>
                 <Card.Header className='header'>{plantType.name}</Card.Header>
-                <Card.Meta className='meta' style={{ margin: '0.5rem 0' }}>
+                <Card.Meta className='meta'>
                   {plantType.cost} coins
                 </Card.Meta>
                 <Card.Description className='description'>
