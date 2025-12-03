@@ -6,7 +6,7 @@ import ShelfPage from './pages/shelf';
 import ShopPage from './pages/shop';
 import WorkstationPage from './pages/workstation';
 import TaskPage from './pages/tasklist';
-import Navigation from './components/Navigation';
+import Navigation from './nav';
 import "./styles.css"
 import "./App.css"
 function AppContent() {

@@ -1,5 +1,4 @@
 // other imports
-import withFirebaseAuth from 'react-with-firebase-auth';
 import { getAuth } from 'firebase/auth';
 import { signInWithPopup } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
@@ -35,10 +34,7 @@ const providers = {
   googleProvider: new GoogleAuthProvider(),
 };
 
-const createComponentWithAuth = withFirebaseAuth({
-  providers,
-  firebaseAppAuth: auth,
-});
+
 
 const signInWithGoogle = () => {
   signInWithPopup(auth, providers.googleProvider);
@@ -51,7 +47,6 @@ const signOutFirebase = () => {
 export {
   db,
   auth,
-  createComponentWithAuth,
   signInWithGoogle,
   signOutFirebase as signOut,
 };

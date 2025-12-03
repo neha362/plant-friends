@@ -4,9 +4,10 @@ import { useAuth } from '../contexts/AuthContext';
 import { db } from '../firebase';
 import { doc, getDoc, setDoc, updateDoc, increment } from 'firebase/firestore';
 import "../styles.css"
+
 const WORK_TIME = 25 * 60; // 25 minutes in seconds
 const BREAK_TIME = 5 * 60; // 5 minutes in seconds
-const COIN_INTERVAL =  10; // 1 coin every 5 minutes
+const COIN_INTERVAL = 300; // 1 coin every 5 minutes
 
 function WorkstationPage() {
   const { currentUser } = useAuth();
@@ -181,109 +182,198 @@ function WorkstationPage() {
   };
 
   return (
-    <Container className='item-container'>
-      <Header as="h1" textAlign="center">
-        {isBreak ? '☕ Break Time' : 'Study Timer'}
+    <Container className='item-container' style={{ maxWidth: '800px', marginTop: '2rem' }}>
+      <Header as="h1" textAlign="center" style={{ marginBottom: '2rem', color: '#386641' }}>
+        {isBreak ? '☕ Break Time' : '🍅 Study Timer'}
       </Header>
 
       {/* Stats */}
-      <Segment textAlign="center">
+      <div style={{
+        background: '#f2e8cf',
+        borderRadius: '15px',
+        padding: '2rem',
+        marginBottom: '2rem',
+        boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
+      }}>
         <Statistic.Group widths="3" size="small">
           <Statistic>
-            <Statistic.Value>
-
-              {coins}
-            </Statistic.Value>
-            <Statistic.Label>Total Coins</Statistic.Label>
+            <Statistic.Value style={{ color: '#386641' }}>🪙 {coins}</Statistic.Value>
+            <Statistic.Label style={{ color: '#6a994e' }}>Total Coins</Statistic.Label>
           </Statistic>
           <Statistic>
-            <Statistic.Value>{coinsEarnedThisSession}</Statistic.Value>
-            <Statistic.Label>This Session</Statistic.Label>
+            <Statistic.Value style={{ color: '#386641' }}>✨ {coinsEarnedThisSession}</Statistic.Value>
+            <Statistic.Label style={{ color: '#6a994e' }}>This Session</Statistic.Label>
           </Statistic>
           <Statistic>
-            <Statistic.Value>{totalWorkSessions}</Statistic.Value>
-            <Statistic.Label>Sessions</Statistic.Label>
+            <Statistic.Value style={{ color: '#386641' }}>📚 {totalWorkSessions}</Statistic.Value>
+            <Statistic.Label style={{ color: '#6a994e' }}>Sessions</Statistic.Label>
           </Statistic>
         </Statistic.Group>
-      </Segment>
+      </div>
 
       {/* Timer Display */}
-      <Segment textAlign="center" style={{ padding: '3rem' }}>
-        <Header as="h1" style={{ fontSize: '4rem', margin: 0 }}>
+      <div style={{
+        background: isBreak ? 'linear-gradient(135deg, #6a994e 0%, #a7c957 100%)' : 'linear-gradient(135deg, #386641 0%, #6a994e 100%)',
+        borderRadius: '20px',
+        padding: '3rem 2rem',
+        marginBottom: '2rem',
+        boxShadow: '0 8px 16px rgba(0,0,0,0.2)',
+        textAlign: 'center',
+        color: 'white'
+      }}>
+        <div style={{ fontSize: '5rem', fontWeight: 'bold', marginBottom: '1rem' }}>
           {formatTime(timeLeft)}
-        </Header>
+        </div>
 
         <Progress
           percent={getProgress()}
-          color={isBreak ? 'green' : 'blue'}
+          style={{
+            margin: '1.5rem 0',
+            background: 'rgba(255,255,255,0.2)',
+            borderRadius: '10px'
+          }}
+          color={isBreak ? 'olive' : 'green'}
           size="large"
-          style={{ marginTop: '2rem' }}
         />
 
         {!isBreak && !isRunning && workTimeElapsedRef.current === 0 && (
-          <Message info>
+          <div style={{
+            background: 'rgba(255,255,255,0.15)',
+            borderRadius: '10px',
+            padding: '1rem',
+            marginTop: '1rem'
+          }}>
             <Icon name="lightbulb" />
             Earn 1 coin every 5 minutes! Complete the full 25 minutes to earn 5 coins.
-          </Message>
+          </div>
         )}
 
         {!isBreak && isRunning && (
-          <Message positive>
+          <div style={{
+            background: 'rgba(255,255,255,0.15)',
+            borderRadius: '10px',
+            padding: '1rem',
+            marginTop: '1rem'
+          }}>
             <Icon name="clock" />
             Next coin in: <strong>{getNextCoinTime()}</strong>
-          </Message>
+          </div>
         )}
-      </Segment>
 
-      {/* Controls */}
-      <Segment textAlign="center">
-        <Button.Group size="large">
-          {!isRunning ? (
-            <Button primary onClick={startTimer} icon labelPosition="left">
-              <Icon name="play" />
-              Start
-            </Button>
-          ) : (
-            <Button onClick={pauseTimer} icon labelPosition="left">
-              <Icon name="pause" />
-              Pause
-            </Button>
-          )}
+        {/* Controls */}
+        <div style={{ marginTop: '2rem' }}>
+          <Button.Group size="huge">
+            {!isRunning ? (
+              <Button 
+                style={{
+                  background: '#f2e8cf',
+                  color: '#386641',
+                  fontWeight: 'bold',
+                  padding: '1rem 2rem'
+                }}
+                onClick={startTimer} 
+                icon 
+                labelPosition="left"
+              >
+                <Icon name="play" />
+                Start
+              </Button>
+            ) : (
+              <Button 
+                style={{
+                  background: '#f2e8cf',
+                  color: '#386641',
+                  fontWeight: 'bold',
+                  padding: '1rem 2rem'
+                }}
+                onClick={pauseTimer} 
+                icon 
+                labelPosition="left"
+              >
+                <Icon name="pause" />
+                Pause
+              </Button>
+            )}
 
-          <Button onClick={resetTimer} icon labelPosition="left">
-            <Icon name="redo" />
-            Reset
-          </Button>
-        </Button.Group>
-      </Segment>
+            <Button 
+              style={{
+                background: '#f2e8cf',
+                color: '#386641',
+                fontWeight: 'bold',
+                padding: '1rem 2rem'
+              }}
+              onClick={resetTimer} 
+              icon 
+              labelPosition="left"
+            >
+              <Icon name="redo" />
+              Reset
+            </Button>
+          </Button.Group>
+        </div>
+      </div>
 
       {/* Info */}
-      <Message >
-        <Message.Header>Pomodoro Technique</Message.Header>
-        <Message.List className="message-list">
-          <Message.Item className='message-item'>Work for 25 minutes with full focus</Message.Item>
-          <Message.Item className='message-item'>Earn 1 coin every 5 minutes (5 coins total!)</Message.Item>
-          <Message.Item className='message-item'>Take a 5-minute break after each session</Message.Item>
-          <Message.Item className='message-item'>Use coins to buy more plants for you and your friends! 🌱</Message.Item>
-        </Message.List>
-      </Message>
+      <div style={{
+        background: '#f2e8cf',
+        borderRadius: '15px',
+        padding: '2rem',
+        boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
+      }}>
+        <Header as="h3" style={{ color: '#386641', marginBottom: '1rem' }}>
+          🍅 Pomodoro Technique
+        </Header>
+        <div style={{ color: '#386641' }}>
+          <div style={{ marginBottom: '0.5rem' }}>📖 Work for 25 minutes with full focus</div>
+          <div style={{ marginBottom: '0.5rem' }}>🪙 Earn 1 coin every 5 minutes (5 coins total!)</div>
+          <div style={{ marginBottom: '0.5rem' }}>☕ Take a 5-minute break after each session</div>
+          <div>🌱 Use coins to buy more plants for you and your friends!</div>
+        </div>
+      </div>
 
       {/* Break Prompt Modal */}
       <Modal open={showBreakPrompt} size="small">
-        <Modal.Header>🎉 Work Session Complete!</Modal.Header>
-        <Modal.Content>
-          <div style={{ textAlign: 'center', padding: '2rem' }}>
-            <Header as="h2">
-              Great job! You earned {coinsEarnedThisSession} coins! 🪙
-            </Header>
-            <p>Time for a 5-minute break to recharge.</p>
+        <Modal.Content style={{
+          textAlign: 'center',
+          padding: '3rem 2rem',
+          background: 'linear-gradient(135deg, #a7c957 0%, #6a994e 100%)',
+          color: 'white'
+        }}>
+          <div style={{ fontSize: '80px', marginBottom: '1rem' }}>🎉</div>
+          <Header as="h1" style={{ color: 'white', marginBottom: '1rem' }}>
+            Work Session Complete!
+          </Header>
+          <div style={{
+            background: 'rgba(255,255,255,0.2)',
+            borderRadius: '15px',
+            padding: '1.5rem',
+            fontSize: '1.3rem'
+          }}>
+            You earned <strong>{coinsEarnedThisSession} coins! 🪙</strong>
+            <p style={{ marginTop: '1rem', fontSize: '1.1rem' }}>Time for a 5-minute break to recharge ☕</p>
           </div>
         </Modal.Content>
-        <Modal.Actions>
-          <Button onClick={skipBreak}>
+        <Modal.Actions style={{ background: '#f2e8cf', padding: '1.5rem' }}>
+          <Button 
+            onClick={skipBreak} 
+            size='large'
+            style={{
+              background: 'white',
+              color: '#386641'
+            }}
+          >
             Skip Break
           </Button>
-          <Button primary onClick={startBreak} icon labelPosition="right">
+          <Button 
+            size='large'
+            onClick={startBreak} 
+            icon 
+            labelPosition="right"
+            style={{
+              background: '#6a994e',
+              color: 'white'
+            }}
+          >
             Start Break
             <Icon name="coffee" />
           </Button>

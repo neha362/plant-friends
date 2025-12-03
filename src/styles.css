@@ -8,15 +8,14 @@
     display: flex;
 }
 
-body {
+.item {
   margin: 0;
   min-height: 100vh;
-  background-image: linear-gradient(rgba(121, 206, 75, 0.738), rgba(121, 206, 75, 0.621)),
-                    url('natalie-kovach-ph7QQq63lCs-unsplash.jpg');
-  background-size: cover;       /* scale to cover screen */
-  background-position: center;  /* center the image */
-  background-repeat: no-repeat; /* prevent tiling */
-  background-attachment: fixed; /* <-- keeps background fixed */
+  background-image: linear-gradient(rgba(106, 153, 78, 0.85), rgba(167, 201, 87, 0.75)), url('natalie-kovach-ph7QQq63lCs-unsplash.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat:repeat;
+  background-attachment: fixed;
   font-family: 'Segoe UI', sans-serif;
 }
 
@@ -36,7 +35,7 @@ body {
     width: 300px;
     justify-content: center;
     align-items: center;
-    background-color: rgb(80, 165, 80);
+    background-color: #f2e8cf;
     z-index: 100;
     padding:40px;
     position: fixed;
@@ -53,24 +52,24 @@ body {
 }
 
 .alert {
-    background-color: rgb(61, 178, 61);
+    background-color: #a7c957;
 }
 
-
 h1 {
-      margin: 0;
+  margin: 0;
   font-size: 2rem;
   width:fit-content;
-  color: #2e7d32;
+  color: #386641;
   font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
   text-decoration:underline;
   text-decoration-style: wavy;
   text-decoration-thickness:5%;
   text-underline-offset: 30%;
 }
+
 .ui.menu {
     justify-content: center;
-    background-color: #ffffff !important;
+    background-color: #f2e8cf !important;
     border-radius: 20px;
     padding:1%;
     border:none !important;
@@ -78,26 +77,24 @@ h1 {
 }
 
 .ui.menu .item {
-border-right: none !important;
-border-left: none !important;
+  border-right: none !important;
+  border-left: none !important;
 }
-
 
 /* Force background fill for menu items */
 .ui.menu .item.menu-item {
-  color: rgb(0, 0, 0) !important;
-  
+  color: #386641 !important;
   border-radius: 8px;
   padding: 1%;
-    margin:1%;
-    font-weight: 600;
-    font-size:medium;
+  margin:1%;
+  font-weight: 600;
+  font-size:medium;
 }
 
 /* Header item */
 .ui.menu .item.menu-header {
-  background-color: #ffffff !important;
-  color: rgb(0, 0, 0) !important;
+  background-color: #f2e8cf !important;
+  color: #386641 !important;
   border-radius: 20px !important;
   padding: 1%;
   margin: 4%;
@@ -106,16 +103,14 @@ border-left: none !important;
 
 /* Optional: hover effect */
 .ui.menu .item.menu-item:hover {
-  background-color: #1b5e20 !important; /* darker green on hover */
+  background-color: #386641 !important;
   color: #fff !important;
 }
-
-
 
 .container {
    margin: 1%;
   padding: 0%;
-  background-color:#ffffffe0;
+  background-color: #f2e8cf;
   vertical-align: middle;
   justify-content:center;
   text-align: center;
@@ -126,7 +121,7 @@ border-left: none !important;
 .item-container {
   margin: 1%;
   padding: 2%;
-  background-color:#aaed61;
+  background-color: #a7c957;
   border-radius: 10px;
 }
 
@@ -134,14 +129,13 @@ h1 {
   margin: 0;
   font-size: 2rem;
   width:fit-content;
-  color: #2e7d32;
+  color: #386641;
   font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
   text-decoration:underline;
   text-decoration-style: wavy;
   text-decoration-thickness:5%;
   text-underline-offset: 30%;
 }
-
 
 .shop-message {
   margin-bottom: 2rem;
@@ -150,16 +144,17 @@ h1 {
 
 .statistic {
   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-  background-color:#ffffff9f;
+  background-color: #f2e8cf;
   border-radius: 20px;
   padding: 1%;
   vertical-align: middle;
-  border-color: #00000090;
+  border-color: #6a994e;
   border-style: solid;
   width:15%;
   text-align: center;
   font-weight:bold;
-  margin:2%
+  margin:2%;
+  color: #386641;
 }
 
 .button {
@@ -170,6 +165,8 @@ h1 {
   width: 15%;
   font-size:small;
   margin:2%;
+  background-color: #6a994e;
+  color: white;
 }
 
 .card {
@@ -184,24 +181,22 @@ h1 {
 
 .content {
   min-height: 220px;
-  background-color: beige;
+  background-color: rgba(242, 232, 207, 0.5); /* More transparent */
   border-radius: 20px;
   text-align: center;
   justify-items: center;
-  
   padding: 5%;
   width: fit-content;
   aspect-ratio: 1/1;
-  vertical-align:middle; 
+  vertical-align:middle;
   font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-  
 }
 
 .emoji {
   font-size: 300%;
   margin: 1%;
   border-radius: 50%;
-  border-color: #2e7d43;
+  border-color: #6a994e;
   background-color: #dff2cb;
   border-width: 400%;
   border-style: solid;
@@ -216,19 +211,18 @@ h1 {
 .header {
   font-size: 1.3rem;
   font-weight: bold;
-  color: #388e3c;
-  
+  color: #386641;
 }
 
 .meta {
   margin: 0.5rem 0;
   font-weight: 500;
-  color: #757575;
+  color: #6a994e;
 }
 
 .description {
   font-size: 0.9rem;
-  color: #555;
+  color: #6a994e;
 }
 
 .extra.space {
@@ -253,80 +247,133 @@ h1 {
 }
 
 .modal {
-  background: #f9fbe7; 
+  background: #f2e8cf;
 }
 
 .modal .header {
   font-size: 1.5rem;
-  color: #2e7d32;
+  color: #386641;
 }
 
 .modal p {
   margin: 1rem 0 0.5rem;
   font-weight: 500;
+  color: #386641;
 }
 
 .modal input {
   margin-bottom: 1rem;
 }
+
 .ui.menu.navbar {
-  background-color: #ffffff9f !important;
-  
+  background-color: #f2e8cf !important;
 }
 
 .navbar {
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-weight: 200;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-weight: 200;
   display: flex;
-  justify-content:center; 
+  justify-content: space-between;
   align-items: center;
-  margin:1%;
-  padding: 1%;
-  background-color: #2e7d329f;
-  position: sticky; 
-  top: 0;              /* keeps it stuck at the top */
-  width: 100vw;         /* full width */
-  margin: 0;           /* remove margin so it touches edges */
-  left: 0;             /* ensure it aligns with left edge */
+  padding: 1.5rem 5rem;
+  background-color: #f2e8cf;
+  position: sticky;
+  top: 0;
+  width: 100vw;
+  box-sizing: border-box;
+  margin: 0;
+  margin-left: calc(-50vw + 50%);
+  margin-right: calc(-50vw + 50%);
+  padding-left: calc(50vw - 50% + 3rem);
+  padding-right: calc(50vw - 50% + 3rem);
+  left: 0;
   right: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
-
 
 .navbar-logo {
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   font-weight: bold;
   cursor: pointer;
+  color: #386641;
+  letter-spacing: 1px;
 }
 
-
-.navbar-links {
+.navbar-center {
   display: flex;
-  gap: 1rem;
+  gap: 2rem;
   align-items: center;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
-.navbar-links a {
+.navbar-right {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+  margin-left: auto;
+}
+
+.navbar-links a,
+.navbar-center a {
   text-decoration: none;
-  font-weight: 500;
-  transition: color 0.2s ease;
+  font-weight: 600;
+  font-size: 1.05rem;
+  transition: all 0.3s ease;
   text-align: center;
+  color: #386641;
+  padding: 0.75rem 1.25rem;
+  border-radius: 10px;
 }
 
-.navbar-links a:hover {
-  color: #c8e6c9;
-  border-radius: 100%;
-  border-color: aqua;
+.navbar-center a:hover {
+  background: rgba(106, 153, 78, 0.15);
+  color: #6a994e;
+  transform: translateY(-2px);
 }
 
-.navbar-links .active {
-  border-bottom: 2px solid #fff;
-  border-radius: 100%;
-  border-color: #2e7d32;
+.navbar-center .active {
+  background: #6a994e;
+  color: white;
+  border-bottom: none;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
 }
 
-.navbar-links .inactive {
-  border-bottom: 2px solid #fff;
-  border-radius: 100%;
-  border-color: #2e7d32;
-  color:black
+.navbar-center .inactive {
+  border-bottom: none;
+  color: #386641;
+}
+
+.logout-btn {
+  background: #bc4749 !important;
+  color: white !important;
+  border: none !important;
+  padding: 0.75rem 1.75rem !important;
+  border-radius: 10px !important;
+  cursor: pointer !important;
+  font-weight: 600 !important;
+  font-size: 1rem !important;
+  transition: all 0.3s ease !important;
+  font-family: Verdana, Geneva, Tahoma, sans-serif !important;
+  border-bottom: none !important;
+  box-shadow: 0 2px 6px rgba(188, 71, 73, 0.3) !important;
+}
+
+.logout-btn:hover {
+  background: #a03c3e !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(188, 71, 73, 0.4) !important;
+}
+
+.user-email {
+  padding: 0.5rem 1rem !important;
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  font-size: 0.9rem !important;
+  border-bottom: none !important;
+  color: #386641 !important;
+  font-weight: 500 !important;
 }

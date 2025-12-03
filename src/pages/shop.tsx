@@ -20,12 +20,12 @@ interface Plant {
 }
 
 const PLANT_TYPES = [
-  { type: 'succulent', name: 'Succulent', emoji: '🪴', cost: 20, description: 'imma succulent' },
-  { type: 'cactus', name: 'Cactus', emoji: '🌵', cost: 15, description: 'imma cactus bleh' },
-  { type: 'flower', name: 'Flower', emoji: '🌸', cost: 18, description: 'im generic' },
-  { type: 'tree', name: 'Tree', emoji: '🌳', cost: 25, description: 'lowk big for a study plant' },
-  { type: 'sunflower', name: 'Sunflower', emoji: '🌻', cost: 22, description: 'flower2' },
-  { type: 'herb', name: 'Herb', emoji: '🌿', cost: 12, description: 'description...' },
+  { type: 'succulent', name: 'Succulent', emoji: '🪴', cost: 20, description: 'a cute succulent, super independent!' },
+  { type: 'cactus', name: 'Cactus', emoji: '🌵', cost: 15, description: 'a prickly cactus, be careful not to touch' },
+  { type: 'flower', name: 'Flower', emoji: '🌸', cost: 18, description: 'a classic and pretty flower' },
+  { type: 'tree', name: 'Tree', emoji: '🌳', cost: 25, description: 'a small tree' },
+  { type: 'sunflower', name: 'Sunflower', emoji: '🌻', cost: 22, description: 'a bright sunflower to liven your desk' },
+  { type: 'herb', name: 'Herb', emoji: '🌿', cost: 12, description: 'a tasty (?) herb' },
 ];
 
 function ShopPage() {
@@ -34,9 +34,9 @@ function ShopPage() {
   const [coins, setCoins] = useState(0);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
-  const [modal,setModal] = useState(false);
+  const [modal, setModal] = useState(false);
   const [targetEmail, setTargetEmail] = useState("");
-  const [selectedPlant, setPlant] = useState(null);
+  const [selectedPlant, setPlant] = useState<typeof PLANT_TYPES[0] | null>(null);
   const [giftMessage, setGiftMessage] = useState("");
 
   useEffect(() => {
@@ -107,6 +107,19 @@ function ShopPage() {
       return;
     }
 
+    // Validate recipient email
+    if (!targetEmail.trim()) {
+      setMessage('❌ Please enter a recipient email');
+      setTimeout(() => setMessage(''), 3000);
+      return;
+    }
+
+    if (targetEmail.toLowerCase() === currentUser.email?.toLowerCase()) {
+      setMessage("❌ You can't send a plant to yourself!");
+      setTimeout(() => setMessage(''), 3000);
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -122,38 +135,53 @@ function ShopPage() {
       };
 
       const usersRef = collection(db, 'users');
-      const q = query(usersRef, where('email','==',targetEmail))
+      const q = query(usersRef, where('email', '==', targetEmail.toLowerCase()));
       const snapshot = await getDocs(q);
 
       if (snapshot.empty) {
-        setMessage("No user found with that email");
-        setTimeout(()=>setMessage(''),3000);
+        setMessage("❌ No user found with that email");
+        setTimeout(() => setMessage(''), 3000);
         setLoading(false);
         return;
       }
-      const receiverDoc = snapshot.docs[0].ref;
-      await updateDoc(receiverDoc, {
+
+      const recipientDocRef = snapshot.docs[0].ref;
+      const recipientData = snapshot.docs[0].data();
+      
+      // Get existing gift alerts or create empty array
+      const existingGiftAlerts = recipientData.giftAlerts || [];
+      
+      // Add new gift to the array
+      const newGiftAlert = {
+        plantName: plantType.name,
+        sender: currentUser.email || 'A friend',
+        giftMessage: giftMessage || 'Enjoy your new plant!',
+        timestamp: Date.now()
+      };
+
+      await updateDoc(recipientDocRef, {
         plants: arrayUnion(newPlant),
-        giftAlert: {
-          plantName: plantType.name,
-          sender: currentUser.email,
-          giftMessage: giftMessage
-        }
+        giftAlerts: arrayUnion(newGiftAlert)
       });
+
       const senderDoc = doc(db, 'users', currentUser.uid);
-      await updateDoc (senderDoc,{
-        coins: coins-plantType.cost
+      await updateDoc(senderDoc, {
+        coins: coins - plantType.cost
       });
 
       setCoins(coins - plantType.cost);
       setMessage(`🎉 You sent a ${plantType.name} to ${targetEmail}!`);
       
       setTimeout(() => {
-        navigate('/shelf');
-      }, 1500);
+        setModal(false);
+        setTargetEmail('');
+        setGiftMessage('');
+        setPlant(null);
+        setMessage('');
+      }, 2000);
     } catch (error) {
-      console.error('Error buying plant:', error);
-      setMessage('❌ Error buying plant. Please try again.');
+      console.error('Error sending plant:', error);
+      setMessage('❌ Error sending plant. Please try again.');
       setTimeout(() => setMessage(''), 3000);
     } finally {
       setLoading(false);
@@ -165,20 +193,40 @@ function ShopPage() {
       {/* Header */}
       
       <div className='header'>
-        <Button onClick={() => navigate('/shelf')} className='button'>
-            Back to Shelf
-          </Button>
-        <Header as="h1" className='item-container'>Plant Shop    
+        <Button 
+          onClick={() => navigate('/shelf')} 
+          className='button'
+          style={{
+            background: '#6a994e',
+            color: 'white'
+          }}
+        >
+          Back to Shelf
+        </Button>
+        <Header as="h1" className='item-container' style={{ color: '#386641' }}>
+          🌿 Plant Shop    
         </Header>
-          <div className='statistic'>{coins} Coins</div>
+        <div className='statistic' style={{ 
+          background: '#f2e8cf',
+          padding: '0.5rem 1rem',
+          borderRadius: '8px',
+          color: '#386641',
+          fontWeight: 'bold'
+        }}>
+          🪙 {coins} Coins
+        </div>
       </div>
 
       {message && (
         <Message
-        className='shop-message'
+          className='shop-message'
           positive={message.includes('🎉')}
           negative={message.includes('❌')}
-          style={{ marginBottom: '2rem' }}
+          style={{ 
+            marginBottom: '2rem',
+            background: message.includes('🎉') ? '#a7c957' : '#bc4749',
+            color: 'white'
+          }}
         >
           {message}
         </Message>
@@ -187,95 +235,155 @@ function ShopPage() {
       {/* Plants Grid */}
       <Card.Group itemsPerRow={3} stackable>
         {PLANT_TYPES.map((plantType) => (
-            <Card key={plantType.type} className='card' fluid>
-              <Card.Content className='content'>
-                <div className='emoji'>
-                  {plantType.emoji}
-                </div>
-                <Card.Header className='header'>{plantType.name}</Card.Header>
-                <Card.Meta className='meta'>
-                  {plantType.cost} coins
-                </Card.Meta>
-                <Card.Description className='description'>
-                  {plantType.description}
-                </Card.Description>
-                <Button
+          <Card key={plantType.type} className='card' fluid style={{
+            background: '#f2e8cf',
+            boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
+          }}>
+            <Card.Content className='content' style={{ paddingBottom: '1.5rem' }}>
+              <div className='emoji'>
+                {plantType.emoji}
+              </div>
+              <Card.Header className='header' style={{ color: '#386641' }}>
+                {plantType.name}
+              </Card.Header>
+              <Card.Meta className='meta' style={{ color: '#6a994e' }}>
+                🪙 {plantType.cost} coins
+              </Card.Meta>
+              <Card.Description className='description' style={{ color: '#6a994e', marginBottom: '1rem' }}>
+                {plantType.description}
+              </Card.Description>
+              <Button
                 className='button'
-                  primary
-                  fluid
-                  onClick={() => buyPlant(plantType)}
-                  disabled={coins < plantType.cost || loading}
-                  loading={loading}
-                >
-                  {coins < plantType.cost ? 'Not enough coins' : `Buy for ${plantType.cost} coins`}
-                </Button>
-                <Button
+                onClick={() => buyPlant(plantType)}
+                disabled={coins < plantType.cost || loading}
+                loading={loading}
+                style={{ 
+                  marginBottom: '0.5rem',
+                  background: coins < plantType.cost ? '#ccc' : '#386641',
+                  color: 'white',
+                  width: '100%',
+                  padding: '0.8rem 1rem',
+                  whiteSpace: 'normal',
+                  height: 'auto',
+                  minHeight: '40px'
+                }}
+              >
+                {coins < plantType.cost ? 'Not enough coins' : `Buy for ${plantType.cost} coins`}
+              </Button>
+              <Button
                 className='button'
-                  primary
-                  fluid
-                  onClick={() => {
-                    setModal(true);
-                    setPlant(plantType);
-                  }}
-                  disabled={coins < plantType.cost || loading}
-                  loading={loading}
-                >
-                  {coins < plantType.cost ? 'Not enough coins' : `Send to friend for ${plantType.cost} coins`}
-                </Button>
-              </Card.Content>
-            </Card>
+                onClick={() => {
+                  setModal(true);
+                  setPlant(plantType);
+                }}
+                disabled={coins < plantType.cost || loading}
+                style={{
+                  background: coins < plantType.cost ? '#ccc' : '#6a994e',
+                  color: 'white',
+                  width: '100%',
+                  padding: '0.8rem 1rem',
+                  whiteSpace: 'normal',
+                  height: 'auto',
+                  minHeight: '40px'
+                }}
+              >
+                <Icon name='gift' /> {coins < plantType.cost ? 'Not enough coins' : `Send to friend (${plantType.cost} coins)`}
+              </Button>
+            </Card.Content>
+          </Card>
         ))}
       </Card.Group>
+
       <Modal
-          size='fullscreen'
-          dimmer="dimmed"
-          open = {modal}
-          onClose = {() => setModal(false)}
-          className='modal'
-        >
-          <Modal.Header>
-            Send plant to a Friend!
-          </Modal.Header>
-          <Modal.Content>
-            <p>Enter friends's user Email: </p>
-            <Input
-            fluid
-            placeholder = "Friends User Email"
-            value = {targetEmail}
-            onChange={(e)=>setTargetEmail(e.target.value)}
-            />
-            <p>Add a message: </p>
-            <Input
-            fluid
-            placeholder = "message"
-            value = {giftMessage}
-            onChange={(e)=>setGiftMessage(e.target.value)}
-            />
-          </Modal.Content>
-          <Modal.Actions>
-            <Button onClick={()=>setModal(false)}>
-              Cancel
-            </Button>
-            <Button
-            primary
-            onClick={async ()=>{
+        size='small'
+        dimmer="dimmed"
+        open={modal}
+        onClose={() => {
+          setModal(false);
+          setTargetEmail('');
+          setGiftMessage('');
+          setPlant(null);
+        }}
+        className='modal'
+      >
+        <Modal.Header style={{ background: '#386641', color: 'white' }}>
+          <Icon name='gift' /> Send {selectedPlant?.emoji} {selectedPlant?.name} to a Friend!
+        </Modal.Header>
+        <Modal.Content style={{ background: '#f2e8cf' }}>
+          <p style={{ color: '#386641', fontWeight: 'bold' }}>Enter friend's email address:</p>
+          <input
+            type='email'
+            placeholder="friend@example.com"
+            value={targetEmail}
+            onChange={(e) => setTargetEmail(e.target.value)}
+            disabled={loading}
+            style={{
+              width: '100%',
+              padding: '12px',
+              fontSize: '16px',
+              border: '2px solid #6a994e',
+              borderRadius: '8px',
+              marginBottom: '1rem'
+            }}
+          />
+          <p style={{ color: '#386641', fontWeight: 'bold' }}>Add a message (optional):</p>
+          <textarea
+            placeholder="Enjoy your new plant!"
+            value={giftMessage}
+            onChange={(e) => setGiftMessage(e.target.value)}
+            disabled={loading}
+            rows={4}
+            style={{
+              width: '100%',
+              padding: '10px',
+              fontSize: '14px',
+              border: '2px solid #6a994e',
+              borderRadius: '8px',
+              resize: 'vertical'
+            }}
+          />
+        </Modal.Content>
+        <Modal.Actions style={{ background: '#f2e8cf' }}>
+          <Button 
+            onClick={() => {
+              setModal(false);
+              setTargetEmail('');
+              setGiftMessage('');
+              setPlant(null);
+            }}
+            disabled={loading}
+            style={{
+              background: 'white',
+              color: '#386641'
+            }}
+          >
+            Cancel
+          </Button>
+          <Button
+            onClick={async () => {
               if (!targetEmail) {
-                alert("Please enter a valid ID")
+                setMessage("❌ Please enter a valid email");
+                setTimeout(() => setMessage(''), 3000);
                 return;
               }
-              if (!selectedPlant){
-                alert("No plant seleted");
+              if (!selectedPlant) {
+                setMessage("❌ No plant selected");
+                setTimeout(() => setMessage(''), 3000);
                 return;
               }
               await sendPlant(selectedPlant, targetEmail, giftMessage);
-              setModal(false);
             }}
-            disabled={!selectedPlant||!targetEmail||loading}
-            >
-              Send plant
-              </Button>
-          </Modal.Actions>
-        </Modal>
+            disabled={!selectedPlant || !targetEmail || loading}
+            loading={loading}
+            style={{
+              background: '#6a994e',
+              color: 'white'
+            }}
+          >
+            <Icon name='gift' /> Send Plant ({selectedPlant?.cost} coins)
+          </Button>
+        </Modal.Actions>
+      </Modal>
     </Container>
   );
 }
