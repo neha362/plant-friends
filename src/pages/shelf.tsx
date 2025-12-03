@@ -93,7 +93,7 @@ function ShelfPage() {
     <Container className='item-container'>
       {/* Header */}
       <div className='header'>
-        <h1 className='item-container' style={{ color: '#386641' }}>🌿 My Plant Shelf</h1>
+        <h1 className='item-container' style={{ color: '#386641' }}>My Plant Shelf</h1>
         <Button 
           className="button" 
           onClick={() => navigate('/shop')}
@@ -216,9 +216,9 @@ function ShelfPage() {
                 <Card.Header className='header' style={{ color: '#386641' }}>
                   {plant.name}
                 </Card.Header>
-                <Card.Meta className='meta' style={{ color: '#6a994e' }}>
-                  <Icon name="bitcoin" /> {plant.cost} coins
-                </Card.Meta>
+                <Card.Meta style={{ color: '#6a994e', margin: '0.25rem 0' }}>
+  🪙 {plant.cost} coins
+</Card.Meta>
                 <Card.Description className='description' style={{ color: '#6a994e' }}>
                   {plant.description}
                 </Card.Description>

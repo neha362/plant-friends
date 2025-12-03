@@ -183,8 +183,8 @@ function WorkstationPage() {
 
   return (
     <Container className='item-container' style={{ maxWidth: '800px', marginTop: '2rem' }}>
-      <Header as="h1" textAlign="center" style={{ marginBottom: '2rem', color: '#386641' }}>
-        {isBreak ? '☕ Break Time' : '🍅 Study Timer'}
+      <Header as="h1" textAlign="left" style={{ marginBottom: '2rem', color: '#386641' }}>
+        {isBreak ? '☕ Break Time' : 'Study Timer'}
       </Header>
 
       {/* Stats */}

@@ -118,8 +118,8 @@ export default function Tasks() {
 
     return (
         <Container className="item-container" style={{ maxWidth: '800px', marginTop: '2rem' }}>
-            <Header as="h1" textAlign="center" style={{ color: '#386641', marginBottom: '2rem' }}>
-                ✅ Task List
+            <Header as="h1" textAlign="left" style={{ color: '#386641', marginBottom: '2rem' }}>
+                Task List
             </Header>
 
             {/* Stats */}

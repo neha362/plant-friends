@@ -20,11 +20,11 @@ interface Plant {
 }
 
 const PLANT_TYPES = [
-  { type: 'succulent', name: 'Succulent', emoji: '🪴', cost: 20, description: 'a cute succulent, super independent!' },
-  { type: 'cactus', name: 'Cactus', emoji: '🌵', cost: 15, description: 'a prickly cactus, be careful not to touch' },
+  { type: 'succulent', name: 'Succulent', emoji: '🪴', cost: 20, description: 'a cute succulent, independent!' },
+  { type: 'cactus', name: 'Cactus', emoji: '🌵', cost: 15, description: 'a prickly cactus, be careful' },
   { type: 'flower', name: 'Flower', emoji: '🌸', cost: 18, description: 'a classic and pretty flower' },
   { type: 'tree', name: 'Tree', emoji: '🌳', cost: 25, description: 'a small tree' },
-  { type: 'sunflower', name: 'Sunflower', emoji: '🌻', cost: 22, description: 'a bright sunflower to liven your desk' },
+  { type: 'sunflower', name: 'Sunflower', emoji: '🌻', cost: 22, description: 'a lively sunflower' },
   { type: 'herb', name: 'Herb', emoji: '🌿', cost: 12, description: 'a tasty (?) herb' },
 ];
 
@@ -190,28 +190,27 @@ function ShopPage() {
 
   return (
     <Container className='item-container'>
-      {/* Header */}
-      
-      <div className='header'>
-        <Button 
-          onClick={() => navigate('/shelf')} 
-          className='button'
-          style={{
-            background: '#6a994e',
-            color: 'white'
-          }}
+            {/* Header */}
+            <div className='header'>
+              <h1 className='item-container' style={{ color: '#386641' }}>Plant Shop</h1>
+              <Button 
+                className="button" 
+                onClick={() => navigate('/shelf')}
+                style={{
+                  background: '#6a994e',
+                  color: 'white'
+                }}
         >
           Back to Shelf
         </Button>
-        <Header as="h1" className='item-container' style={{ color: '#386641' }}>
-          🌿 Plant Shop    
-        </Header>
+      
         <div className='statistic' style={{ 
           background: '#f2e8cf',
           padding: '0.5rem 1rem',
           borderRadius: '8px',
           color: '#386641',
           fontWeight: 'bold'
+        
         }}>
           🪙 {coins} Coins
         </div>
